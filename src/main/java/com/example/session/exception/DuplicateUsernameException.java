@@ -1,12 +1,13 @@
 package com.example.session.exception;
 
+import com.example.session.common.Code;
 import lombok.Getter;
 
 @Getter
 public class DuplicateUsernameException extends RuntimeException {
-    private final ErrorCode errorCode;
+    private final Code errorCode;
 
-    public DuplicateUsernameException(ErrorCode code, String message) {
+    public DuplicateUsernameException(Code code, String message) {
         super(message);
         this.errorCode = code;
     }

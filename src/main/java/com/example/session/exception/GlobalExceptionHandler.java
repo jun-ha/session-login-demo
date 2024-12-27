@@ -1,6 +1,7 @@
 package com.example.session.exception;
 
-import org.springframework.http.HttpStatus;
+import com.example.session.common.Code;
+import com.example.session.common.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        ErrorCode code = ErrorCode.INVALID_INPUT;
+    public ResponseEntity<Response<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        Code code = Code.INVALID_INPUT;
         BindingResult bindingResult = ex.getBindingResult();
 
         StringBuilder sb = new StringBuilder();
@@ -26,16 +27,16 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity
-                .status(HttpStatus.valueOf(code.getStatus()))
-                .body(new ErrorResponse(code.getCode(), sb.toString()));
+                .ok()
+                .body(new Response<>(code.getCode(), null, sb.toString()));
     }
 
     @ExceptionHandler(DuplicateUsernameException.class)
-    public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(DuplicateUsernameException e) {
-        ErrorCode code = e.getErrorCode();
+    public ResponseEntity<Response<Void>> handleUsernameAlreadyExistsException(DuplicateUsernameException e) {
+        Code code = e.getErrorCode();
 
         return ResponseEntity
-                .status(HttpStatus.valueOf(code.getStatus()))
-                .body(new ErrorResponse(code.getCode(), e.getMessage()));
+                .ok()
+                .body(new Response<>(code.getCode(), null, e.getMessage()));
     }
 }
