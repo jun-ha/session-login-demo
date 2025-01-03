@@ -31,9 +31,15 @@ public class GlobalExceptionHandler {
                 .body(new Response<>(code.getCode(), null, sb.toString()));
     }
 
-    @ExceptionHandler(DuplicateUsernameException.class)
-    public ResponseEntity<Response<Void>> handleUsernameAlreadyExistsException(DuplicateUsernameException e) {
-        Code code = e.getErrorCode();
+    @ExceptionHandler({
+            DuplicateUsernameException.class,
+            UserNotFoundException.class,
+            WrongPasswordException.class,
+            DuplicateLoginException.class,
+            MissingSessionException.class
+    })
+    public ResponseEntity<Response<Void>> handleUsernameAlreadyExistsException(CustomException e) {
+        Code code = e.getCode();
 
         return ResponseEntity
                 .ok()
